@@ -113,7 +113,7 @@ foreach my $file_sfd (@input_files)
 	# No accompanying SRT subtitle file found.
 	if(!-e $file_srt)
 	{
-		print "   - Accompanying subtitle file \"" . $file_sfd . "\" not found, skipping.\n";
+		print "   - Accompanying subtitle file \"" . $file_srt . "\" not found, skipping.\n";
 	}
 	# Otherwise, continue processing video.
 	else
