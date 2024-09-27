@@ -42,9 +42,6 @@ foreach my $file (@helper_utilities)
 	}
 }
 
-# Declare configuration options hash.
-my %config_options;
-
 # Throw error if configuration INI doesn't exist.
 if(!-e "config.ini")
 {
@@ -57,7 +54,7 @@ if(!-e "config.ini")
 }
 
 # Store hash of configuration options from INI.
-%config_options = &read_ini("config.ini");
+my %config_options = &read_ini("config.ini");
 
 # Perform configuration INI validation.
 my($valid_ini, $ini_error_message) = &validate_ini(%config_options);
@@ -187,7 +184,7 @@ foreach my $file_sfd (@input_files)
 		unlink("m2v.m2v");
 
 		# Status message.
-		print "   - Re-muxing new video with original audio stream...\n";
+		print "   - Remuxing new video with original audio stream...\n";
 		
 		# Re-mux video and original audio stream.
 		system "sfdmux.exe -V=m1v.m1v -A=sfa.sfa -S=sfd.sfd > NUL 2>&1";
