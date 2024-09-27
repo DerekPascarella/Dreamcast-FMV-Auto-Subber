@@ -8,6 +8,10 @@ Dreamcast FMV Auto-Subber is capable of intelligently detecting both resolutions
 ## Current Version
 Dreamcast FMV Auto-Subber is currently at version [1.0](https://github.com/DerekPascarella/Saturn-15bpp-Graphics-Converter/releases/download/1.0/Saturn.15bpp.Graphics.Converter.v1.0.zip).
 
+## Changelog
+- **Version 1.0 (2024-09-27)**
+    - Initial release
+
 ## INI Configuration Options
 | Key              | Description                                                                             | Example Value        |
 |------------------|-----------------------------------------------------------------------------------------|----------------------|
