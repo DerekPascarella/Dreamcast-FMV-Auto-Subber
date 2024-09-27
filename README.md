@@ -10,7 +10,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.0](https://github.com/Derek
 
 ## Changelog
 - **Version 1.0 (2024-09-27)**
-    - Initial release
+    - Initial release.
 
 ## INI Configuration Options
 | Key              | Description                                                                             | Example Value        |
