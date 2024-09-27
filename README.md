@@ -49,4 +49,4 @@ Once all original SFD video files and their accompanying SRT subtitle files are 
 Once complete, all new SFD video files will be placed in the `output` folder, ready for use.
 
 ## Example Output
-![Example Output](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/blob/main/example_output.png?raw=true)
+![Example Output](https://raw.githubusercontent.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/refs/heads/main/example_output.png)
