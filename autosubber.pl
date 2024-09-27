@@ -186,7 +186,7 @@ foreach my $file_sfd (@input_files)
 		# Status message.
 		print "   - Remuxing new video with original audio stream...\n";
 		
-		# Re-mux video and original audio stream.
+		# Remux video and original audio stream.
 		system "sfdmux.exe -V=m1v.m1v -A=sfa.sfa -S=sfd.sfd > NUL 2>&1";
 		unlink("sfa.sfa");
 		unlink("m1v.m1v");
