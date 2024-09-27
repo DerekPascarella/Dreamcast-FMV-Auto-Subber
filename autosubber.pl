@@ -90,7 +90,7 @@ if(!@input_files)
 }
 
 # Status message.
-print scalar(@input_files) . " videos found in \"input\" folder.\n\n";
+print scalar(@input_files) . " video(s) found in \"input\" folder.\n\n";
 
 # Copy each helper utility to "input" folder.
 foreach my $file (@helper_utilities)
