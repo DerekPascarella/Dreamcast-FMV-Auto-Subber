@@ -10,10 +10,10 @@ use strict;
 use File::Copy;
 
 # Set version number.
-my $version = "1.0";
+my $version = "1.1";
 
 # Set header used in CLI messages.
-my $cli_header = "\nDreamcast FMV Auto-Subber " . $version . "\nA utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.\n\nWritten by Derek Pascarella (ateam)\n\n";
+my $cli_header = "\nDreamcast FMV Auto-Subber v" . $version . "\nA utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.\n\nWritten by Derek Pascarella (ateam)\n\n";
 
 # Check for existence of helper utilities.
 my @helper_utilities =
@@ -138,7 +138,7 @@ foreach my $file_sfd (@input_files)
 		}
 		
 		# Continue constructing ffmpeg command.
-		$ffmpeg_command .= ",OutlineColour=&H" . $config_options{'outline_color'} . "&,Outline=" . $config_options{'outline_strength'} . ",MarginV=" . $config_options{'margin_vertical'} . ",MarginL=" . $config_options{'margin_left'} . ",MarginR=" . $config_options{'margin_right'};
+		$ffmpeg_command .= ",PrimaryColour=&H" . $config_options{'font_color'} . "&,OutlineColour=&H" . $config_options{'outline_color'} . "&,Outline=" . $config_options{'outline_strength'} . ",MarginV=" . $config_options{'margin_vertical'} . ",MarginL=" . $config_options{'margin_left'} . ",MarginR=" . $config_options{'margin_right'};
 
 		# Store results of ffprobe to check video dimensions to ensure proper subtitle scaling.
 		my $dimension_test = `ffprobe.exe -v quiet -select_streams v:0 -show_entries stream=width,height -of csv=p=0 $file_sfd 2>NUL`;
@@ -258,10 +258,10 @@ sub validate_ini
 	my %config = @_;
 
 	# Store list of string type keys.
-	my @string_keys = ('font_face');
+	my @string_keys = ('font_face', 'font_color', 'outline_color');
 
 	# Store list of integer type keys.
-	my @integer_keys = ('font_size', 'outline_color', 'outline_strength', 'margin_vertical', 'margin_left', 'margin_right', 'bitrate');
+	my @integer_keys = ('font_size', 'outline_strength', 'margin_vertical', 'margin_left', 'margin_right', 'bitrate');
 
 	# Validate bold setting.
 	if($config{'font_bold'} ne "yes" && $config{'font_bold'} ne "no")
