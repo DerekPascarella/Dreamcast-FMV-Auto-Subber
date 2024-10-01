@@ -40,7 +40,6 @@ The following folder structure will be created after extracting the release pack
 │   ├── adxencd.exe
 │   ├── demux.exe
 │   ├── ffmpeg.exe
-│   ├── ffprobe.exe
 │   ├── legaladx.exe
 │   ├── Sfdmux.dll
 │   └── sfdmux.exe
