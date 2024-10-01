@@ -17,7 +17,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.1](https://github.com/Derek
     - Initial release.
 
 ## INI Configuration Options
-| Key              | Description                                                                             | Example Value        |
+| Key              | Description                                                                             | Example Value(s)        |
 |------------------|-----------------------------------------------------------------------------------------|----------------------|
 | `font_face`      | Specifies the font family to use for subtitles. Note that this must be the full name of a valid font installed on the system running this program.                                          | `Arial`              |
 | `font_bold`      | Enables or disables bold text for subtitles. Accepts `yes` or `no`.                      | `yes`                |
@@ -28,7 +28,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.1](https://github.com/Derek
 | `margin_vertical`| Adjusts the vertical margin between the bottom of the screen and the subtitles.          | `30`                 |
 | `margin_left`    | Adjusts the left margin between the subtitles and the left edge of the screen.           | `25`                 |
 | `margin_right`   | Adjusts the right margin between the subtitles and the right edge of the screen.         | `25`                 |
-| `bitrate`        | Specifies the video bitrate in bits per second. Controls the output video quality.       | `1250000`            |
+| `bitrate`        | Specifies the video bitrate in bits per second. Controls the output video quality.       | `1250000` (good for CDIs), `2600000` (good for GDIs)            |
 
 ## Usage
 The following folder structure will be created after extracting the release package.
