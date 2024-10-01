@@ -6,9 +6,12 @@ It is designed to accept original SFD video files and accompanying SRT subtitle 
 Dreamcast FMV Auto-Subber is capable of intelligently detecting both resolutions found in Dreamcast SFD video files (320x224 and 320x448). It will scale subtitle text accordingly to ensure that it's proportional.
 
 ## Current Version
-Dreamcast FMV Auto-Subber is currently at version [1.0](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.0/Dreamcast.FMV.Auto-Subber.v1.0.zip).
+Dreamcast FMV Auto-Subber is currently at version [1.1](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.1/Dreamcast.FMV.Auto-Subber.v1.1.zip).
 
 ## Changelog
+- **Version 1.1 (2024-10-01)**
+    - Added option for custom subtitle text color.
+    - Fixed bug preventing use of non-integer outline color value (e.g., `000000` was permitted but not `FFFFFF`).
 - **Version 1.0 (2024-09-27)**
     - Initial release.
 
@@ -18,6 +21,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.0](https://github.com/Derek
 | `font_face`      | Specifies the font family to use for subtitles. Note that this must be the full name of a valid font installed on the system running this program.                                          | `Arial`              |
 | `font_bold`      | Enables or disables bold text for subtitles. Accepts `yes` or `no`.                      | `yes`                |
 | `font_size`      | Defines the size of the subtitle font in points.                                         | `16`                 |
+| `font_color`  | Sets the color of the subtitle text using a hex color code (in BGR format).           | `FFFFFF` (white)     |
 | `outline_color`  | Sets the color of the subtitle outline using a hex color code (in BGR format).           | `000000` (black)     |
 | `outline_strength`| Determines the thickness of the subtitle outline. A higher number creates a thicker outline. | `2`                  |
 | `margin_vertical`| Adjusts the vertical margin between the bottom of the screen and the subtitles.          | `30`                 |
