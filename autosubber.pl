@@ -21,7 +21,6 @@ my @helper_utilities =
 	"adxencd.exe",
 	"demux.exe",
 	"ffmpeg.exe",
-	"ffprobe.exe",
 	"legaladx.exe",
 	"Sfdmux.dll",
 	"sfdmux.exe"
@@ -140,11 +139,11 @@ foreach my $file_sfd (@input_files)
 		# Continue constructing ffmpeg command.
 		$ffmpeg_command .= ",PrimaryColour=&H" . $config_options{'font_color'} . "&,OutlineColour=&H" . $config_options{'outline_color'} . "&,Outline=" . $config_options{'outline_strength'} . ",MarginV=" . $config_options{'margin_vertical'} . ",MarginL=" . $config_options{'margin_left'} . ",MarginR=" . $config_options{'margin_right'};
 
-		# Store results of ffprobe to check video dimensions to ensure proper subtitle scaling.
-		my $dimension_test = `ffprobe.exe -v quiet -select_streams v:0 -show_entries stream=width,height -of csv=p=0 $file_sfd 2>NUL`;
+		# Check video dimensions to ensure proper subtitle scaling.
+		my $dimension_test = `ffmpeg.exe -i $file_sfd 2>&1 | findstr /r /c:\"Stream.*Video:.* [0-9][0-9]*x[0-9][0-9]*\"`;
 
 		# Use half-scale subtitle text for narrow video resolutions.
-		if($dimension_test =~ /320,448/)
+		if($dimension_test =~ /320x448/)
 		{
 			$ffmpeg_command .= ",ScaleX=0.5";
 		}
