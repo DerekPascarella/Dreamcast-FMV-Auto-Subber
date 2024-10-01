@@ -12,6 +12,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.1](https://github.com/Derek
 - **Version 1.1 (2024-10-01)**
     - Added option for custom subtitle text color.
     - Fixed bug preventing use of non-integer outline color value (e.g., `000000` was permitted but not `FFFFFF`).
+    - Eliminated use of `ffprobe` to query video dimensions (now using `ffmpeg`).
 - **Version 1.0 (2024-09-27)**
     - Initial release.
 
