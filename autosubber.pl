@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Dreamcast FMV Auto-Subber v1.0
+# Dreamcast FMV Auto-Subber v1.1
 # A utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.
 #
 # Written by Derek Pascarella (ateam)
