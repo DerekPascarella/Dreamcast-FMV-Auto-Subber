@@ -6,9 +6,11 @@ It is designed to accept original SFD video files and accompanying SRT subtitle 
 Dreamcast FMV Auto-Subber is capable of intelligently detecting both resolutions found in Dreamcast SFD video files (320x224 and 320x448). It will scale subtitle text accordingly to ensure that it's proportional.
 
 ## Current Version
-Dreamcast FMV Auto-Subber is currently at version [1.1](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.1/Dreamcast.FMV.Auto-Subber.v1.1.zip).
+Dreamcast FMV Auto-Subber is currently at version [1.2](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.1/Dreamcast.FMV.Auto-Subber.v1.2.zip).
 
 ## Changelog
+- **Version 1.2 (2024-11-01)**
+    - Fixed bug where `font_face`, `font_color`, and `outline_color` configuration options could be erroneously flagged as invalid.
 - **Version 1.1 (2024-10-01)**
     - Added option for custom subtitle text color.
     - Fixed bug preventing use of non-integer outline color value (e.g., `000000` was permitted but not `FFFFFF`).
