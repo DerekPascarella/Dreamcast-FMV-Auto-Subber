@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Dreamcast FMV Auto-Subber v1.1
+# Dreamcast FMV Auto-Subber v1.2
 # A utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.
 #
 # Written by Derek Pascarella (ateam)
@@ -10,7 +10,7 @@ use strict;
 use File::Copy;
 
 # Set version number.
-my $version = "1.1";
+my $version = "1.2";
 
 # Set header used in CLI messages.
 my $cli_header = "\nDreamcast FMV Auto-Subber v" . $version . "\nA utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.\n\nWritten by Derek Pascarella (ateam)\n\n";
@@ -265,22 +265,14 @@ sub validate_ini
 	# Validate bold setting.
 	if($config{'font_bold'} ne "yes" && $config{'font_bold'} ne "no")
 	{
-		return(0, "Configuration option \"font_bold\" should be \"yes\" or \"no\" (is currently set to \"" . $config{'font_bold'} . "\").");
+		return(0, "Configuration option \"font_bold\" should be \"yes\" or \"no\" (currently set to \"" . $config{'font_bold'} . "\").");
 	}
 
 	# Validate string keys.
 	foreach my $key (@string_keys)
 	{
-		# Key exists.
-		if(exists $config{$key})
-		{
-			unless($config{$key} =~ /^[\w\s]+$/)
-			{
-				return(0, "Configuration option \"" . $key . "\" should be a string (is currently set to \"" . $config{$key} . "\").");
-			}
-		}
-		# Key does not exist.
-		else
+		# Key does not exist
+		if(!exists $config{$key})
 		{
 			return(0, "Configuration option \"" . $key . "\" is missing.");
 		}
@@ -294,7 +286,7 @@ sub validate_ini
 		{
 			unless($config{$key} =~ /^\d+$/)
 			{
-				return(0, "Configuration option \"" . $key . "\" should be an integer number (is currently set to \"" . $config{$key} . "\").");
+				return(0, "Configuration option \"" . $key . "\" should be an integer number (currently set to \"" . $config{$key} . "\").");
 			}
 		}
 		# Key does not exist.
