@@ -12,7 +12,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.3](https://github.com/Derek
 
 ## Changelog
 - **Version 1.3 (2025-01-14)**
-    - Added error-handling when attempting to process SFD with no audio stream.
+    - Added error-handling when attempting to process SFDs with no audio stream.
     - Rewrote video dimension detection and scaling logic to intelligently account for videos of any resolution.
 - **Version 1.2 (2024-11-01)**
     - Fixed bug where `font_face`, `font_color`, and `outline_color` configuration options could be erroneously flagged as invalid.
