@@ -142,11 +142,8 @@ foreach my $file_sfd (@input_files)
 			$ffmpeg_command .= "0";
 		}
 
-		# Continue constructing ffmpeg command.
-		$ffmpeg_command .= ",PrimaryColour=&H" . $config_options{'font_color'} . "&,OutlineColour=&H" . $config_options{'outline_color'} . "&,Outline=" . $config_options{'outline_strength'} . ",MarginV=" . $config_options{'margin_vertical'} . ",MarginL=" . $config_options{'margin_left'} . ",MarginR=" . $config_options{'margin_right'} .= ",ScaleX=" . $subtitle_scale;
-
 		# Finish constructing ffmpeg command.
-		$ffmpeg_command .= "'\" m1v.m1v";
+		$ffmpeg_command .= ",PrimaryColour=&H" . $config_options{'font_color'} . "&,OutlineColour=&H" . $config_options{'outline_color'} . "&,Outline=" . $config_options{'outline_strength'} . ",MarginV=" . $config_options{'margin_vertical'} . ",MarginL=" . $config_options{'margin_left'} . ",MarginR=" . $config_options{'margin_right'} .= ",ScaleX=" . $subtitle_scale .= "'\" m1v.m1v";
 
 		# Status message.
 		print "   - Demuxing original SFD...\n";
