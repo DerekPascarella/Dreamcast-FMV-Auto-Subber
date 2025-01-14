@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Dreamcast FMV Auto-Subber v1.2
+# Dreamcast FMV Auto-Subber v1.3
 # A utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.
 #
 # Written by Derek Pascarella (ateam)
@@ -10,7 +10,7 @@ use strict;
 use File::Copy;
 
 # Set version number.
-my $version = "1.2";
+my $version = "1.3";
 
 # Set header used in CLI messages.
 my $cli_header = "\nDreamcast FMV Auto-Subber v" . $version . "\nA utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.\n\nWritten by Derek Pascarella (ateam)\n\n";
@@ -69,9 +69,6 @@ if(!$valid_ini)
 	exit; 
 }
 
-# Status message.
-print $cli_header;
-
 # Read contents of "input" folder and store each SFD file name in element of array.
 opendir(my $dh, "input");
 my @input_files = grep { /\.sfd$/i && -f "input/" . $_ } readdir($dh);
@@ -87,6 +84,9 @@ if(!@input_files)
 	
 	exit; 
 }
+
+# Status message.
+print $cli_header;
 
 # Status message.
 print scalar(@input_files) . " video(s) found in \"input\" folder.\n\n";
@@ -120,10 +120,16 @@ foreach my $file_sfd (@input_files)
 		# Status message.
 		print "   - Constructing ffmpeg command...\n";
 
+		# Parse video dimensions to calculate proper subtitle horizontal scaling and output video resolution.
+		my ($dimensions) = `ffmpeg.exe -i $file_sfd 2>&1 | findstr /r /c:\"Stream.*Video:.* [0-9][0-9]*x[0-9][0-9]*\"` =~ /\b(\d+x\d+)\b/;
+		my ($width, $height) = $dimensions =~ /^(\d+)x(\d+)$/;
+		my $ideal_width_for_height = $height * (4 / 3);
+		my $subtitle_scale = sprintf("%.3f", $width / $ideal_width_for_height);
+
 		# Begin constructing ffmpeg command.
 		my $ffmpeg_command =  "ffmpeg.exe -i m2v.m2v -vcodec mpeg1video ";
 		   $ffmpeg_command .= "-b:v " . $config_options{'bitrate'} . " -maxrate " . $config_options{'bitrate'} . " -minrate " . $config_options{'bitrate'} . " -bufsize " . $config_options{'bitrate'} . " -muxrate " . $config_options{'bitrate'} . " ";
-		   $ffmpeg_command .= "-s 320x224 -an -vf \"subtitles=" . $file_srt . ":force_style='Fontname=" . $config_options{'font_face'} . ",Fontsize=" . $config_options{'font_size'} . ",Bold=";
+		   $ffmpeg_command .= "-s " . $dimensions . " -an -vf \"subtitles=" . $file_srt . ":force_style='Fontname=" . $config_options{'font_face'} . ",Fontsize=" . $config_options{'font_size'} . ",Bold=";
 
 		# Set bold text.
 		if($config_options{'font_bold'} eq "yes")
@@ -135,18 +141,9 @@ foreach my $file_sfd (@input_files)
 		{
 			$ffmpeg_command .= "0";
 		}
-		
+
 		# Continue constructing ffmpeg command.
-		$ffmpeg_command .= ",PrimaryColour=&H" . $config_options{'font_color'} . "&,OutlineColour=&H" . $config_options{'outline_color'} . "&,Outline=" . $config_options{'outline_strength'} . ",MarginV=" . $config_options{'margin_vertical'} . ",MarginL=" . $config_options{'margin_left'} . ",MarginR=" . $config_options{'margin_right'};
-
-		# Check video dimensions to ensure proper subtitle scaling.
-		my $dimension_test = `ffmpeg.exe -i $file_sfd 2>&1 | findstr /r /c:\"Stream.*Video:.* [0-9][0-9]*x[0-9][0-9]*\"`;
-
-		# Use half-scale subtitle text for narrow video resolutions.
-		if($dimension_test =~ /320x448/)
-		{
-			$ffmpeg_command .= ",ScaleX=0.5";
-		}
+		$ffmpeg_command .= ",PrimaryColour=&H" . $config_options{'font_color'} . "&,OutlineColour=&H" . $config_options{'outline_color'} . "&,Outline=" . $config_options{'outline_strength'} . ",MarginV=" . $config_options{'margin_vertical'} . ",MarginL=" . $config_options{'margin_left'} . ",MarginR=" . $config_options{'margin_right'} .= ",ScaleX=" . $subtitle_scale;
 
 		# Finish constructing ffmpeg command.
 		$ffmpeg_command .= "'\" m1v.m1v";
@@ -156,45 +153,57 @@ foreach my $file_sfd (@input_files)
 		
 		# Demux SFD.
 		system "demux.exe $file_sfd demux > NUL 2>&1";
-		rename("demux_c0.m2a", "m2a.m2a");
-		rename("demux_e0.m2v", "m2v.m2v");
 
-		# Status message.
-		print "   - Converting audio stream to WAV...\n";
+		# An error occurred when attempting to demux SFD.
+		if(!-e "demux_c0.m2a" || !-e "demux_e0.m2v")
+		{
+			print STDERR "     ERROR: Could not successfully demux audio and video stream!\n";
+			print "            Skipping...\n";
+		}
+		# Otherwise, proceed.
+		else
+		{
+			# Rename audio and video streams.
+			rename("demux_c0.m2a", "m2a.m2a");
+			rename("demux_e0.m2v", "m2v.m2v");
 
-		# Convert M2A to WAV.
-		system "ffmpeg.exe -i m2a.m2a -c:a pcm_s16le -ar 44100 -ac 2 wav.wav > NUL 2>&1";
-		unlink("m2a.m2a");
+			# Status message.
+			print "   - Converting audio stream to WAV...\n";
 
-		# Status message.
-		print "   - Converting WAV to SFA...\n";
+			# Convert M2A to WAV.
+			system "ffmpeg.exe -i m2a.m2a -c:a pcm_s16le -ar 44100 -ac 2 wav.wav > NUL 2>&1";
+			unlink("m2a.m2a");
 
-		# Convert WAV to SFA.
-		system "adxencd.exe wav.wav adx.adx > NUL 2>&1";
-		unlink ("wav.wav");
-		system "legaladx.exe adx.adx sfa.sfa > NUL 2>&1";
-		unlink("adx.adx");
+			# Status message.
+			print "   - Converting WAV to SFA...\n";
 
-		# Status message.
-		print "   - Encoding new video with subtitles...\n";
+			# Convert WAV to SFA.
+			system "adxencd.exe wav.wav adx.adx > NUL 2>&1";
+			unlink ("wav.wav");
+			system "legaladx.exe adx.adx sfa.sfa > NUL 2>&1";
+			unlink("adx.adx");
 
-		# Encode new video with baked-in subtitles.
-		system "$ffmpeg_command > NUL 2>&1";
-		unlink("m2v.m2v");
+			# Status message.
+			print "   - Encoding new video with subtitles...\n";
 
-		# Status message.
-		print "   - Remuxing new video with original audio stream...\n";
-		
-		# Remux video and original audio stream.
-		system "sfdmux.exe -V=m1v.m1v -A=sfa.sfa -S=sfd.sfd > NUL 2>&1";
-		unlink("sfa.sfa");
-		unlink("m1v.m1v");
+			# Encode new video with baked-in subtitles.
+			system "$ffmpeg_command > NUL 2>&1";
+			unlink("m2v.m2v");
 
-		# Status message.
-		print "   - Moving new SFD to \"output\" folder...\n";
+			# Status message.
+			print "   - Remuxing new video with original audio stream...\n";
+			
+			# Remux video and original audio stream.
+			system "sfdmux.exe -V=m1v.m1v -A=sfa.sfa -S=sfd.sfd > NUL 2>&1";
+			unlink("sfa.sfa");
+			unlink("m1v.m1v");
 
-		# Move new SFD to "output" folder.
-		rename("sfd.sfd", "../output/" . $file_sfd);
+			# Status message.
+			print "   - Moving new SFD to \"output\" folder...\n";
+
+			# Move new SFD to "output" folder.
+			rename("sfd.sfd", "../output/" . $file_sfd);
+		}
 	}
 }
 
