@@ -8,7 +8,7 @@ Dreamcast FMV Auto-Subber intelligently detects source input video dimensions in
 Note that there is presently only support for SFDs that contain both an audio and video stream. However, there are plans to handle the less common video-only SFDs in a future release.
 
 ## Current Version
-Dreamcast FMV Auto-Subber is currently at version [1.2](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.2/Dreamcast.FMV.Auto-Subber.v1.2.zip).
+Dreamcast FMV Auto-Subber is currently at version [1.3](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.3/Dreamcast.FMV.Auto-Subber.v1.3.zip).
 
 ## Changelog
 - **Version 1.3 (2025-01-14)**
