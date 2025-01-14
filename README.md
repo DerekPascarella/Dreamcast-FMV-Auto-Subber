@@ -3,7 +3,7 @@ A utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.
 
 It is designed to accept original SFD video files and accompanying SRT subtitle files as input. It will produce re-encoded SFD video files with the provided subtitles baked into them as output.
 
-Dreamcast FMV Auto-Subber is capable of intelligently detecting both resolutions found in Dreamcast SFD video files (320x224 and 320x448). It will scale subtitle text accordingly to ensure that it's proportional.
+Dreamcast FMV Auto-Subber is capable of intelligently detecting the two most common resolutions found in Dreamcast SFD video files (320x224 and 320x448). It will scale subtitle text accordingly to ensure that it's proportional. Note that a future update will include full resolution detection (e.g., 448x488) in order to properly scale subtitles regardless of video dimensions.
 
 ## Current Version
 Dreamcast FMV Auto-Subber is currently at version [1.2](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.2/Dreamcast.FMV.Auto-Subber.v1.2.zip).
