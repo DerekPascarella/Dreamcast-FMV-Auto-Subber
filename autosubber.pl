@@ -155,7 +155,7 @@ foreach my $file_sfd (@input_files)
 		if(!-e "demux_c0.m2a" || !-e "demux_e0.m2v")
 		{
 			print STDERR "     ERROR: Could not successfully demux audio and video stream!\n";
-			print "     Skipping...\n";
+			print "            Skipping...\n";
 		}
 		# Otherwise, proceed.
 		else
