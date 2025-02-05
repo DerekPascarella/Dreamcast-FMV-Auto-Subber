@@ -176,7 +176,7 @@ foreach my $file_sfd (@input_files)
 
 			# Convert WAV to SFA.
 			system "adxencd.exe wav.wav adx.adx > NUL 2>&1";
-			unlink ("wav.wav");
+			unlink("wav.wav");
 			system "legaladx.exe adx.adx sfa.sfa > NUL 2>&1";
 			unlink("adx.adx");
 
