@@ -35,7 +35,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.3](https://github.com/Derek
 | `margin_vertical`| Adjusts the vertical margin between the bottom of the screen and the subtitles.          | `30`                 |
 | `margin_left`    | Adjusts the left margin between the subtitles and the left edge of the screen.           | `25`                 |
 | `margin_right`   | Adjusts the right margin between the subtitles and the right edge of the screen.         | `25`                 |
-| `bitrate`        | Specifies the video bitrate in bits per second. Controls the output video quality.       | `1250000` (good for CDIs), `2600000` (good for GDIs)            |
+| `bitrate`        | Specifies the video bitrate in bits per second. Controls the output video quality.       | `1250000` (good for CDIs), `2600000` (good for GDIs), but between 400-800 KB/s is SEGA's recommendation            |
 
 ## Usage
 The following folder structure will be created after extracting the release package.
