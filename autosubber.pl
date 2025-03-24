@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Dreamcast FMV Auto-Subber v1.3
+# Dreamcast FMV Auto-Subber v1.4
 # A utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.
 #
 # Written by Derek Pascarella (ateam)
@@ -10,7 +10,7 @@ use strict;
 use File::Copy;
 
 # Set version number.
-my $version = "1.3";
+my $version = "1.4";
 
 # Set header used in CLI messages.
 my $cli_header = "\nDreamcast FMV Auto-Subber v" . $version . "\nA utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.\n\nWritten by Derek Pascarella (ateam)\n\n";
@@ -53,10 +53,10 @@ if(!-e "config.ini")
 }
 
 # Store hash of configuration options from INI.
-my %config_options = &read_ini("config.ini");
+my %config_options = read_ini("config.ini");
 
 # Perform configuration INI validation.
-my($valid_ini, $ini_error_message) = &validate_ini(%config_options);
+my($valid_ini, $ini_error_message) = validate_ini(%config_options);
 
 # Throw error if configuration INI contains invalid or missing options.
 if(!$valid_ini)
@@ -117,14 +117,18 @@ foreach my $file_sfd (@input_files)
 	# Otherwise, continue processing video.
 	else
 	{
-		# Status message.
-		print "   - Constructing ffmpeg command...\n";
+		# Store target aspect ratio width and height from configuration option.
+		my($ar_width, $ar_height) = split(/:/, $config_options{'aspect_ratio'});
 
 		# Parse video dimensions to calculate proper subtitle horizontal scaling and output video resolution.
 		my ($dimensions) = `ffmpeg.exe -i $file_sfd 2>&1 | findstr /r /c:\"Stream.*Video:.* [0-9][0-9]*x[0-9][0-9]*\"` =~ /\b(\d+x\d+)\b/;
 		my ($width, $height) = $dimensions =~ /^(\d+)x(\d+)$/;
-		my $ideal_width_for_height = $height * (4 / 3);
+		my $ideal_width_for_height = $height * ($ar_width / $ar_height);
 		my $subtitle_scale = sprintf("%.3f", $width / $ideal_width_for_height);
+
+		# Status message.
+		print "   - Subtitle horizontal scaling factor " . $subtitle_scale . " calculated for " . $config_options{'aspect_ratio'} . " aspect ratio.\n";
+		print "   - Constructing ffmpeg command...\n";
 
 		# Begin constructing ffmpeg command.
 		my $ffmpeg_command =  "ffmpeg.exe -i m2v.m2v -vcodec mpeg1video ";
@@ -143,7 +147,7 @@ foreach my $file_sfd (@input_files)
 		}
 
 		# Finish constructing ffmpeg command.
-		$ffmpeg_command .= ",PrimaryColour=&H" . $config_options{'font_color'} . "&,OutlineColour=&H" . $config_options{'outline_color'} . "&,Outline=" . $config_options{'outline_strength'} . ",MarginV=" . $config_options{'margin_vertical'} . ",MarginL=" . $config_options{'margin_left'} . ",MarginR=" . $config_options{'margin_right'} .= ",ScaleX=" . $subtitle_scale .= "'\" m1v.m1v";
+		$ffmpeg_command .= ",PrimaryColour=&H" . $config_options{'font_color'} . "&,OutlineColour=&H" . $config_options{'outline_color'} . "&,Outline=" . $config_options{'outline_strength'} . ",MarginV=" . $config_options{'margin_vertical'} . ",MarginL=" . $config_options{'margin_left'} . ",MarginR=" . $config_options{'margin_right'} .= ",ScaleX=" . $subtitle_scale . "'\" m1v.m1v";
 
 		# Status message.
 		print "   - Demuxing original SFD...\n";
@@ -263,7 +267,7 @@ sub validate_ini
 	my %config = @_;
 
 	# Store list of string type keys.
-	my @string_keys = ('font_face', 'font_color', 'outline_color');
+	my @string_keys = ('font_face', 'font_color', 'outline_color', 'aspect_ratio');
 
 	# Store list of integer type keys.
 	my @integer_keys = ('font_size', 'outline_strength', 'margin_vertical', 'margin_left', 'margin_right', 'bitrate');
@@ -281,6 +285,12 @@ sub validate_ini
 		if(!exists $config{$key})
 		{
 			return(0, "Configuration option \"" . $key . "\" is missing.");
+		}
+
+		# Invalid aspect ratio.
+		if($key eq "aspect_ratio" && ($config{$key} !~ /^(\d+):(\d+)$/ || $1 <= 0 || $2 <= 0))
+		{
+			return(0, "Configuration option \"" . $key . "\" is not a valid aspect ratio (currently set to \"" . $config{$key} . "\").");
 		}
 	}
 
