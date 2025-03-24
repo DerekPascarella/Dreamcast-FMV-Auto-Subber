@@ -8,9 +8,11 @@ Dreamcast FMV Auto-Subber intelligently detects source input video dimensions in
 Note that there is presently only support for SFDs that contain both an audio and video stream. However, there are plans to handle less common video-only SFDs in a future release.
 
 ## Current Version
-Dreamcast FMV Auto-Subber is currently at version [1.3](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.3/Dreamcast.FMV.Auto-Subber.v1.3.zip).
+Dreamcast FMV Auto-Subber is currently at version [1.4](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.4/Dreamcast.FMV.Auto-Subber.v1.4.zip).
 
 ## Changelog
+- **Version 1.4 (2025-03-24)**
+    - Added option to manually define target aspect ratio at which video will be rendered by game software, which is used to calculate horizontal scaling of subtitles (was previously locked to `4:3`).
 - **Version 1.3 (2025-01-14)**
     - Added error-handling when attempting to process SFDs with no audio stream.
     - Rewrote video dimension detection and scaling logic to intelligently account for videos of any resolution.
@@ -26,6 +28,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.3](https://github.com/Derek
 ## INI Configuration Options
 | Key              | Description                                                                             | Example Value(s)        |
 |------------------|-----------------------------------------------------------------------------------------|----------------------|
+| `aspect_ratio`   | Defines target aspect ratio at which video will be rendered by game software, used to calculate horizontal scaling of subtitles. | `4:3`, `5:4`, `3:2`, `16:9` |
 | `font_face`      | Specifies the font family to use for subtitles. Note that this must be the full name of a valid font installed on the system running this program.                                          | `Arial`              |
 | `font_bold`      | Enables or disables bold text for subtitles. Accepts `yes` or `no`.                      | `yes`                |
 | `font_size`      | Defines the size of the subtitle font in points.                                         | `16`                 |
@@ -35,7 +38,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.3](https://github.com/Derek
 | `margin_vertical`| Adjusts the vertical margin between the bottom of the screen and the subtitles.          | `30`                 |
 | `margin_left`    | Adjusts the left margin between the subtitles and the left edge of the screen.           | `25`                 |
 | `margin_right`   | Adjusts the right margin between the subtitles and the right edge of the screen.         | `25`                 |
-| `bitrate`        | Specifies the video bitrate in bits per second. Controls the output video quality.       | `1250000` (good for CDIs), `2600000` (good for GDIs), but between 400-800 KB/s is SEGA's recommendation            |
+| `bitrate`        | Specifies the video bitrate in bits per second. Controls the output video quality.       | `1250000` (good for CDIs), `3600000` (good for GDIs), but between 400-800 KB/s is SEGA's recommendation.|
 
 ## Usage
 The following folder structure will be created after extracting the release package.
