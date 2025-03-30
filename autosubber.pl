@@ -10,7 +10,7 @@ use strict;
 use File::Copy;
 
 # Set version number.
-my $version = "1.4";
+my $version = "1.5";
 
 # Set header used in CLI messages.
 my $cli_header = "\nDreamcast FMV Auto-Subber v" . $version . "\nA utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.\n\nWritten by Derek Pascarella (ateam)\n\n";
@@ -109,45 +109,93 @@ foreach my $file_sfd (@input_files)
 	# Replace file extension for to generate SRT subtitle file name.
 	my $file_srt = $file_sfd =~ s/\.[^.]+$/.SRT/r;
 
-	# No accompanying SRT subtitle file found.
-	if(!-e $file_srt)
+	# Replace file extension for to generate ASS subtitle file name.
+	my $file_ass = $file_sfd =~ s/\.[^.]+$/.ASS/r;
+
+	# No accompanying SRT or ASS subtitle file found.
+	if(!-e $file_srt && !-e $file_ass)
 	{
-		print "   - Accompanying subtitle file \"" . $file_srt . "\" not found, skipping.\n";
+		print "   - Accompanying subtitle file \"" . $file_srt . "\" or \"" . $file_ass . "\" not found, skipping.\n";
 	}
 	# Otherwise, continue processing video.
 	else
 	{
-		# Store target aspect ratio width and height from configuration option.
-		my($ar_width, $ar_height) = split(/:/, $config_options{'aspect_ratio'});
+		# Set subtitle format based on detected format.
+		my $sub_format;
 
-		# Parse video dimensions to calculate proper subtitle horizontal scaling and output video resolution.
+		if(-e $file_srt && -e $file_ass)
+		{
+			# Status message.
+			print "   - Both SRT and ASS subtitle files detected. Defaulting to ASS.\n";
+
+			$sub_format = "ass";
+		}
+		elsif(-e $file_srt)
+		{
+			# Status message.
+			print "   - SRT subtitle file detected.\n";
+
+			$sub_format = "srt";
+		}
+		elsif(-e $file_ass)
+		{
+			# Status message.
+			print "   - ASS subtitle file detected, no auto-scaling will be performed.\n";
+
+			$sub_format = "ass";
+		}
+
+		# Parse video dimensions.
 		my ($dimensions) = `ffmpeg.exe -i $file_sfd 2>&1 | findstr /r /c:\"Stream.*Video:.* [0-9][0-9]*x[0-9][0-9]*\"` =~ /\b(\d+x\d+)\b/;
-		my ($width, $height) = $dimensions =~ /^(\d+)x(\d+)$/;
-		my $ideal_width_for_height = $height * ($ar_width / $ar_height);
-		my $subtitle_scale = sprintf("%.3f", $width / $ideal_width_for_height);
 
 		# Status message.
-		print "   - Subtitle horizontal scaling factor " . $subtitle_scale . " calculated for " . $config_options{'aspect_ratio'} . " aspect ratio.\n";
 		print "   - Constructing ffmpeg command...\n";
 
 		# Begin constructing ffmpeg command.
 		my $ffmpeg_command =  "ffmpeg.exe -i m2v.m2v -vcodec mpeg1video ";
 		   $ffmpeg_command .= "-b:v " . $config_options{'bitrate'} . " -maxrate " . $config_options{'bitrate'} . " -minrate " . $config_options{'bitrate'} . " -bufsize " . $config_options{'bitrate'} . " -muxrate " . $config_options{'bitrate'} . " ";
-		   $ffmpeg_command .= "-s " . $dimensions . " -an -vf \"subtitles=" . $file_srt . ":force_style='Fontname=" . $config_options{'font_face'} . ",Fontsize=" . $config_options{'font_size'} . ",Bold=";
+		   $ffmpeg_command .= "-s " . $dimensions . " -an -vf \"subtitles=";
 
-		# Set bold text.
-		if($config_options{'font_bold'} eq "yes")
+		# Subtitles are in SRT format.
+		if($sub_format eq "srt")
 		{
-			$ffmpeg_command .= "1";
+			# Store target aspect ratio width and height from configuration option.
+			my($ar_width, $ar_height) = split(/:/, $config_options{'aspect_ratio'});
+			
+			# Calculate scaling.
+			my ($width, $height) = $dimensions =~ /^(\d+)x(\d+)$/;
+			my $ideal_width_for_height = $height * ($ar_width / $ar_height);
+			my $subtitle_scale = sprintf("%.3f", $width / $ideal_width_for_height);
+
+			# Status message.
+			print "   - Subtitle horizontal scaling factor " . $subtitle_scale . " calculated for " . $config_options{'aspect_ratio'} . " aspect ratio.\n";
+
+			# Continue constructing ffmpeg command.
+			$ffmpeg_command .= $file_srt . ":force_style='Fontname=" . $config_options{'font_face'} . ",Fontsize=" . $config_options{'font_size'} . ",Bold=";
+
+			# Set bold text.
+			if($config_options{'font_bold'} eq "yes")
+			{
+				$ffmpeg_command .= "1";
+			}
+			# Set regular text.
+			else
+			{
+				$ffmpeg_command .= "0";
+			}
+
+			# Continue constructing ffmpeg command.
+			$ffmpeg_command .= ",PrimaryColour=&H" . $config_options{'font_color'} . "&,OutlineColour=&H" . $config_options{'outline_color'} . "&,Outline=" . $config_options{'outline_strength'} . ",MarginV=" . $config_options{'margin_vertical'} . ",MarginL=" . $config_options{'margin_left'} . ",MarginR=" . $config_options{'margin_right'} .= ",ScaleX=" . $subtitle_scale . "'\"";
 		}
-		# Set regular text.
-		else
+		# Subtitles are in ASS format.
+		elsif($sub_format eq "ass")
 		{
-			$ffmpeg_command .= "0";
+			# Continue constructing ffmpeg command.
+			$ffmpeg_command .= $file_ass . "\"";
 		}
 
 		# Finish constructing ffmpeg command.
-		$ffmpeg_command .= ",PrimaryColour=&H" . $config_options{'font_color'} . "&,OutlineColour=&H" . $config_options{'outline_color'} . "&,Outline=" . $config_options{'outline_strength'} . ",MarginV=" . $config_options{'margin_vertical'} . ",MarginL=" . $config_options{'margin_left'} . ",MarginR=" . $config_options{'margin_right'} .= ",ScaleX=" . $subtitle_scale . "'\" m1v.m1v";
+		$ffmpeg_command .= " m1v.m1v";
 
 		# Status message.
 		print "   - Demuxing original SFD...\n";
