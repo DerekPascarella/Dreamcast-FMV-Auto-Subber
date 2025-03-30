@@ -5,7 +5,7 @@ It is designed to accept original SFD video files and accompanying SRT or ASS su
 
 When using the SRT format, which doesn't support text scaling, Dreamcast FMV Auto-Subber intelligently detects the source video's dimensions to properly scale the subtitles according to the desired aspect ratio set in the configuration INI. This is necessary due to many SFDs being encoded in a variety of dimensions and then scaled to a number of different aspect ratios when played back during the game. This process also ensures that the dimensions of the newly encoded SFD with subtitles matches those of the original source video.
 
-When using ASS format, users must set horizontal scaling manually using their tool of choice (e.g., Aegisub). Furthermore, none of the font style INI configuration options are honored when using ASS format (e.g., `font_face`, `font_size`, `outline_color`, `margin_vertical`, etc). Likewise, they are to be defined in the ASS subtitle file itself.
+When using ASS format, users must set horizontal scaling (and any other font style and text placement settings) manually using their tool of choice (e.g., Aegisub). Furthermore, none of the font style or text placement INI configuration options are honored when using ASS format (e.g., `font_face`, `font_size`, `outline_color`, `margin_vertical`, etc). Likewise, they are to be defined in the ASS subtitle file itself.
 
 Note that there is presently only support for SFDs that contain both an audio and video stream. However, there are plans to handle less common video-only SFDs in a future release.
 
