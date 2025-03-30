@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Dreamcast FMV Auto-Subber v1.4
+# Dreamcast FMV Auto-Subber v1.6
 # A utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.
 #
 # Written by Derek Pascarella (ateam)
@@ -10,7 +10,7 @@ use strict;
 use File::Copy;
 
 # Set version number.
-my $version = "1.5";
+my $version = "1.6";
 
 # Set header used in CLI messages.
 my $cli_header = "\nDreamcast FMV Auto-Subber v" . $version . "\nA utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.\n\nWritten by Derek Pascarella (ateam)\n\n";
@@ -140,7 +140,7 @@ foreach my $file_sfd (@input_files)
 		elsif(-e $file_ass)
 		{
 			# Status message.
-			print "   - ASS subtitle file detected, no auto-scaling will be performed.\n";
+			print "   - ASS subtitle file detected.\n";
 
 			$sub_format = "ass";
 		}
@@ -156,13 +156,13 @@ foreach my $file_sfd (@input_files)
 		   $ffmpeg_command .= "-b:v " . $config_options{'bitrate'} . " -maxrate " . $config_options{'bitrate'} . " -minrate " . $config_options{'bitrate'} . " -bufsize " . $config_options{'bitrate'} . " -muxrate " . $config_options{'bitrate'} . " ";
 		   $ffmpeg_command .= "-s " . $dimensions . " -an -vf \"subtitles=";
 
+		# Store target aspect ratio width and height from configuration option.
+		my($ar_width, $ar_height) = split(/:/, $config_options{'aspect_ratio'});
+
 		# Subtitles are in SRT format.
 		if($sub_format eq "srt")
-		{
-			# Store target aspect ratio width and height from configuration option.
-			my($ar_width, $ar_height) = split(/:/, $config_options{'aspect_ratio'});
-			
-			# Calculate scaling.
+		{			
+			# Calculate subtitle scaling.
 			my ($width, $height) = $dimensions =~ /^(\d+)x(\d+)$/;
 			my $ideal_width_for_height = $height * ($ar_width / $ar_height);
 			my $subtitle_scale = sprintf("%.3f", $width / $ideal_width_for_height);
@@ -190,8 +190,14 @@ foreach my $file_sfd (@input_files)
 		# Subtitles are in ASS format.
 		elsif($sub_format eq "ass")
 		{
+			# Calculate subtitle scaling.
+			my $subtitle_scale = int(($ar_width / $ar_height) * 480 + 0.5) . "x480";
+
+			# Status message.
+			print "   - Subtitle scaling at " . $subtitle_scale . " used for " . $config_options{'aspect_ratio'} . " aspect ratio.\n";
+
 			# Continue constructing ffmpeg command.
-			$ffmpeg_command .= $file_ass . "\"";
+			$ffmpeg_command .= $file_ass . ":original_size=" . $subtitle_scale . "\"";
 		}
 
 		# Finish constructing ffmpeg command.
