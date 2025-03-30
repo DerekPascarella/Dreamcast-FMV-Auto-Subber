@@ -1,16 +1,20 @@
 # Dreamcast FMV Auto-Subber
 A utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.
 
-It is designed to accept original SFD video files and accompanying SRT subtitle files as input. It will produce re-encoded SFD video files with the provided subtitles baked into them as output.
+It is designed to accept original SFD video files and accompanying SRT or ASS subtitle files as input. It will produce re-encoded SFD video files with the provided subtitles baked into them as output.
 
-Dreamcast FMV Auto-Subber intelligently detects source input video dimensions in order to properly scale subtitle text for the Dreamcast's 4:3 aspect ratio. This is necessary due to many SFDs being encoded in a variety of dimensions and then scaled to a 4:3 dimension when played back during the game. This process also ensures that the dimensions of the newly encoded SFD with subtitles matches those of the original source video.
+When using the SRT format, which doesn't support text scaling, Dreamcast FMV Auto-Subber intelligently detects the source video's dimensions to properly scale the subtitles according to the desired aspect ratio set in the configuration INI. This is necessary due to many SFDs being encoded in a variety of dimensions and then scaled to a number of different aspect ratios when played back during the game. This process also ensures that the dimensions of the newly encoded SFD with subtitles matches those of the original source video.
+
+When using ASS format, users must set horizontal scaling manually using their tool of choice (e.g., Aegisub). Furthermore, none of the font style INI configuration options are honored when using ASS format (e.g., `font_face`, `font_size`, `outline_color`, `margin_vertical`, etc). Likewise, they are to be defined in the ASS subtitle file itself.
 
 Note that there is presently only support for SFDs that contain both an audio and video stream. However, there are plans to handle less common video-only SFDs in a future release.
 
 ## Current Version
-Dreamcast FMV Auto-Subber is currently at version [1.4](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.4/Dreamcast.FMV.Auto-Subber.v1.4.zip).
+Dreamcast FMV Auto-Subber is currently at version [1.5](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.5/Dreamcast.FMV.Auto-Subber.v1.5.zip).
 
 ## Changelog
+- **Version 1.5 (2025-03-30)**
+    - Added ASS subtitle format support.
 - **Version 1.4 (2025-03-24)**
     - Added `aspect_ratio` configuration option to manually define target aspect ratio at which video will be rendered by game software, which is used to calculate horizontal scaling of subtitles (was previously locked to `4:3`).
 - **Version 1.3 (2025-01-14)**
@@ -26,6 +30,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.4](https://github.com/Derek
     - Initial release.
 
 ## INI Configuration Options
+Note that 
 | Key              | Description                                                                             | Example Value(s)        |
 |------------------|-----------------------------------------------------------------------------------------|----------------------|
 | `aspect_ratio`   | Defines target aspect ratio at which video will be rendered by game software, used to calculate horizontal scaling of subtitles. | `4:3`, `5:4`, `3:2`, `16:9` |
