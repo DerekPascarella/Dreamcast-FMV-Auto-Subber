@@ -194,7 +194,7 @@ foreach my $file_sfd (@input_files)
 			my $subtitle_scale = int(($ar_width / $ar_height) * 480 + 0.5) . "x480";
 
 			# Status message.
-			print "   - Subtitle scaling at " . $subtitle_scale . " used for " . $config_options{'aspect_ratio'} . " aspect ratio.\n";
+			print "   - Subtitle scaling at " . $subtitle_scale . " calculated for " . $config_options{'aspect_ratio'} . " aspect ratio.\n";
 
 			# Continue constructing ffmpeg command.
 			$ffmpeg_command .= $file_ass . ":original_size=" . $subtitle_scale . "\"";
