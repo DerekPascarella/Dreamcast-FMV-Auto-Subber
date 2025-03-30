@@ -3,7 +3,7 @@ A utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.
 
 It is designed to accept original SFD video files and accompanying SRT or ASS subtitle files as input. It will produce re-encoded SFD video files with the provided subtitles baked into them as output.
 
-When using the SRT format, which doesn't support text scaling, Dreamcast FMV Auto-Subber intelligently detects the source video's dimensions to properly scale the subtitles according to the desired aspect ratio set in the configuration INI. This is necessary due to many SFDs being encoded in a variety of dimensions and then scaled to a number of different aspect ratios when played back during the game. This process also ensures that the dimensions of the newly encoded SFD with subtitles matches those of the original source video.
+When using the SRT format, which doesn't support text scaling, Dreamcast FMV Auto-Subber intelligently detects the source video's dimensions to properly scale the subtitles according to value of `aspect_ratio` set in the configuration INI. This is necessary due to many SFDs being encoded in a variety of dimensions and then scaled to a number of different aspect ratios when played back during the game. This process also ensures that the dimensions of the newly encoded SFD with subtitles matches those of the original source video.
 
 When using ASS format, users must set horizontal scaling (and any other font style and text placement settings) using their tool of choice (e.g., Aegisub). This includes `font_face`, `font_size`, `outline_color`, `margin_vertical`, etc., all of which are to be defined in the ASS subtitle file itself.
 
