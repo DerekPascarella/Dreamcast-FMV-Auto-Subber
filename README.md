@@ -7,6 +7,8 @@ Dreamcast FMV Auto-Subber intelligently detects the source video's dimensions to
 
 When using ASS format, users must set font style and subtitle text placement settings using their tool of choice (e.g., Aegisub). This includes `font_face`, `font_size`, `outline_color`, `margin_vertical`, etc., all of which are to be defined in the ASS subtitle file itself.
 
+See the [INI Configuration Options](#ini-configuration-options) section for details on which parameters only apply to SRT subtitle format.
+
 Note that there is presently only support for SFDs that contain both an audio and video stream. However, there are plans to handle less common video-only SFDs in a future release.
 
 ## Current Version
