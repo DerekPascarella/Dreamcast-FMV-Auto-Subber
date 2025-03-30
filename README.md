@@ -17,6 +17,8 @@ Dreamcast FMV Auto-Subber is currently at version [1.6](https://github.com/Derek
 ## Changelog
 - **Version 1.6 (2025-03-30)**
     - Added support for automatic subtitle scaling by aspect ratio when using the ASS format.
+- **Version 1.5 (2025-03-30)**
+    - Added ASS subtitle format support.
 - **Version 1.4 (2025-03-24)**
     - Added `aspect_ratio` configuration option to manually define target aspect ratio at which video will be rendered by game software, which is used to calculate horizontal scaling of subtitles (was previously locked to `4:3`).
 - **Version 1.3 (2025-01-14)**
