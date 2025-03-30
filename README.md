@@ -34,15 +34,15 @@ Note that
 | Key              | Description                                                                             | Example Value(s)        |
 |------------------|-----------------------------------------------------------------------------------------|----------------------|
 | `aspect_ratio`   | Defines target aspect ratio at which video will be rendered by game software, used to calculate horizontal scaling of subtitles. | `4:3`, `5:4`, `3:2`, `16:9` |
-| `font_face`      | Specifies the font family to use for subtitles. Note that this must be the full name of a valid font installed on the system running this program.                                          | `Arial`              |
-| `font_bold`      | Enables or disables bold text for subtitles. Accepts `yes` or `no`.                      | `yes`                |
-| `font_size`      | Defines the size of the subtitle font in points.                                         | `16`                 |
-| `font_color`  | Sets the color of the subtitle text using a hex color code (in BGR format).           | `FFFFFF` (white)     |
-| `outline_color`  | Sets the color of the subtitle outline using a hex color code (in BGR format).           | `000000` (black)     |
-| `outline_strength`| Determines the thickness of the subtitle outline. A higher number creates a thicker outline. | `2`                  |
-| `margin_vertical`| Adjusts the vertical margin between the bottom of the screen and the subtitles.          | `30`                 |
-| `margin_left`    | Adjusts the left margin between the subtitles and the left edge of the screen.           | `25`                 |
-| `margin_right`   | Adjusts the right margin between the subtitles and the right edge of the screen.         | `25`                 |
+| `font_face`      | Specifies the font family to use for subtitles. Note that this must be the full name of a valid font installed on the system running this program. Only applicable to SRT subtitle format.                                          | `Arial`              |
+| `font_bold`      | Enables or disables bold text for subtitles. Accepts `yes` or `no`. Only applicable to SRT subtitle format.                     | `yes`                |
+| `font_size`      | Defines the size of the subtitle font in points. Only applicable to SRT subtitle format.                                        | `16`                 |
+| `font_color`  | Sets the color of the subtitle text using a hex color code (in BGR format). Only applicable to SRT subtitle format.          | `FFFFFF` (white)     |
+| `outline_color`  | Sets the color of the subtitle outline using a hex color code (in BGR format). Only applicable to SRT subtitle format.          | `000000` (black)     |
+| `outline_strength`| Determines the thickness of the subtitle outline. A higher number creates a thicker outline. Only applicable to SRT subtitle format.| `2`                  |
+| `margin_vertical`| Adjusts the vertical margin between the bottom of the screen and the subtitles. Only applicable to SRT subtitle format.         | `30`                 |
+| `margin_left`    | Adjusts the left margin between the subtitles and the left edge of the screen. Only applicable to SRT subtitle format.          | `25`                 |
+| `margin_right`   | Adjusts the right margin between the subtitles and the right edge of the screen. Only applicable to SRT subtitle format.        | `25`                 |
 | `bitrate`        | Specifies the video bitrate in bits per second. Controls the output video quality.       | `1250000` (good for CDIs), `3600000` (good for GDIs), but between 400-800 KB/s is SEGA's recommendation.|
 
 ## Usage
