@@ -3,18 +3,18 @@ A utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.
 
 It is designed to accept original SFD video files and accompanying SRT or ASS subtitle files as input. It will produce re-encoded SFD video files with the provided subtitles baked into them as output.
 
-When using the SRT format, which doesn't support text scaling, Dreamcast FMV Auto-Subber intelligently detects the source video's dimensions to properly scale the subtitles according to value of `aspect_ratio` set in the configuration INI. This is necessary due to many SFDs being encoded in a variety of dimensions and then scaled to a number of different aspect ratios when played back during the game. This process also ensures that the dimensions of the newly encoded SFD with subtitles matches those of the original source video.
+Dreamcast FMV Auto-Subber intelligently detects the source video's dimensions to properly scale the subtitles according to value of `aspect_ratio` set in the configuration INI. This is necessary due to many SFDs being encoded in a variety of dimensions and then scaled to a number of different aspect ratios when played back during the game. This process also ensures that the dimensions of the newly encoded SFD with subtitles matches those of the original source video.
 
-When using ASS format, users must set horizontal scaling (and any other font style and text placement settings) using their tool of choice (e.g., Aegisub). This includes `font_face`, `font_size`, `outline_color`, `margin_vertical`, etc., all of which are to be defined in the ASS subtitle file itself.
+When using ASS format, users must set font style and subtitle text placement settings using their tool of choice (e.g., Aegisub). This includes `font_face`, `font_size`, `outline_color`, `margin_vertical`, etc., all of which are to be defined in the ASS subtitle file itself.
 
 Note that there is presently only support for SFDs that contain both an audio and video stream. However, there are plans to handle less common video-only SFDs in a future release.
 
 ## Current Version
-Dreamcast FMV Auto-Subber is currently at version [1.5](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.5/Dreamcast.FMV.Auto-Subber.v1.5.zip).
+Dreamcast FMV Auto-Subber is currently at version [1.6](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.6/Dreamcast.FMV.Auto-Subber.v1.6.zip).
 
 ## Changelog
-- **Version 1.5 (2025-03-30)**
-    - Added ASS subtitle format support.
+- **Version 1.6 (2025-03-30)**
+    - Added support for automatic subtitle scaling by aspect ratio when using the ASS format.
 - **Version 1.4 (2025-03-24)**
     - Added `aspect_ratio` configuration option to manually define target aspect ratio at which video will be rendered by game software, which is used to calculate horizontal scaling of subtitles (was previously locked to `4:3`).
 - **Version 1.3 (2025-01-14)**
@@ -32,7 +32,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.5](https://github.com/Derek
 ## INI Configuration Options
 | Key              | Description                                                                             | Example Value(s)        |
 |------------------|-----------------------------------------------------------------------------------------|----------------------|
-| `aspect_ratio`   | Defines target aspect ratio at which video will be rendered by game software, used to calculate horizontal scaling of subtitles. Only applicable to SRT subtitle format.| `4:3`, `5:4`, `3:2`, `16:9` |
+| `aspect_ratio`   | Defines target aspect ratio at which video will be rendered by game software, used to calculate horizontal scaling of subtitles.| `4:3`, `5:4`, `3:2`, `16:9` |
 | `font_face`      | Specifies the font family to use for subtitles. Note that this must be the full name of a valid font installed on the system running this program. Only applicable to SRT subtitle format.                                          | `Arial`              |
 | `font_bold`      | Enables or disables bold text for subtitles. Accepts `yes` or `no`. Only applicable to SRT subtitle format.                     | `yes`                |
 | `font_size`      | Defines the size of the subtitle font in points. Only applicable to SRT subtitle format.                                        | `16`                 |
