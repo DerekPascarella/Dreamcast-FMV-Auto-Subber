@@ -32,7 +32,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.5](https://github.com/Derek
 ## INI Configuration Options
 | Key              | Description                                                                             | Example Value(s)        |
 |------------------|-----------------------------------------------------------------------------------------|----------------------|
-| `aspect_ratio`   | Defines target aspect ratio at which video will be rendered by game software, used to calculate horizontal scaling of subtitles. | `4:3`, `5:4`, `3:2`, `16:9` |
+| `aspect_ratio`   | Defines target aspect ratio at which video will be rendered by game software, used to calculate horizontal scaling of subtitles. Only applicable to SRT subtitle format.| `4:3`, `5:4`, `3:2`, `16:9` |
 | `font_face`      | Specifies the font family to use for subtitles. Note that this must be the full name of a valid font installed on the system running this program. Only applicable to SRT subtitle format.                                          | `Arial`              |
 | `font_bold`      | Enables or disables bold text for subtitles. Accepts `yes` or `no`. Only applicable to SRT subtitle format.                     | `yes`                |
 | `font_size`      | Defines the size of the subtitle font in points. Only applicable to SRT subtitle format.                                        | `16`                 |
