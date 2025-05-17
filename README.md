@@ -12,9 +12,12 @@ See the [INI Configuration Options](#ini-configuration-options) section for deta
 Note that there is presently only support for SFDs that contain both an audio and video stream. However, there are plans to handle less common video-only SFDs in a future release.
 
 ## Current Version
-Dreamcast FMV Auto-Subber is currently at version [1.6](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.6/Dreamcast.FMV.Auto-Subber.v1.6.zip).
+Dreamcast FMV Auto-Subber is currently at version [1.7](https://github.com/DerekPascarella/Dreamcast-FMV-Auto-Subber/releases/download/1.7/Dreamcast.FMV.Auto-Subber.v1.7.zip).
 
 ## Changelog
+- **Version 1.7 (2025-05-17)**
+    - Added support for variable bitrate SFD encoding.
+    - Added robust error-checking during encoding process to avoid appearance of success when failures occur.
 - **Version 1.6 (2025-03-30)**
     - Added support for automatic subtitle scaling by aspect ratio when using the ASS format.
 - **Version 1.5 (2025-03-30)**
@@ -46,7 +49,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.6](https://github.com/Derek
 | `margin_vertical`| Adjusts the vertical margin between the bottom of the screen and the subtitles. Only applicable to SRT subtitle format.         | `30`                 |
 | `margin_left`    | Adjusts the left margin between the subtitles and the left edge of the screen. Only applicable to SRT subtitle format.          | `25`                 |
 | `margin_right`   | Adjusts the right margin between the subtitles and the right edge of the screen. Only applicable to SRT subtitle format.        | `25`                 |
-| `bitrate`        | Specifies the video bitrate in bits per second. Controls the output video quality.       | `1250000` (good for CDIs), `3600000` (good for GDIs), but between 400-800 KB/s is SEGA's recommendation.|
+| `bitrate`        | Specifies the video bitrate in either bits per second, or four variable bitrate levels. Controls the output video quality.       | <ul><li><strong>Constant Bitrate:</strong> <code>1250000</code> (good for CDIs), <code>3600000</code> (good for GDIs), but between 400-800 KB/s is SEGA's recommendation.</li><li><strong>Variable Bitrate:</strong> <code>vbrN</code>, where <code>N</code> is a number between <code>1</code> and <code>4</code>, with <code>1</code> being the highest quality.</li></ul>|
 
 ## Usage
 The following folder structure will be created after extracting the release package.
