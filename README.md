@@ -49,7 +49,7 @@ Dreamcast FMV Auto-Subber is currently at version [1.7](https://github.com/Derek
 | `margin_vertical`| Adjusts the vertical margin between the bottom of the screen and the subtitles. Only applicable to SRT subtitle format.         | `30`                 |
 | `margin_left`    | Adjusts the left margin between the subtitles and the left edge of the screen. Only applicable to SRT subtitle format.          | `25`                 |
 | `margin_right`   | Adjusts the right margin between the subtitles and the right edge of the screen. Only applicable to SRT subtitle format.        | `25`                 |
-| `bitrate`        | Specifies the video bitrate in either bits per second, or four variable bitrate levels. Controls the output video quality.       | <ul><li><strong>Constant Bitrate:</strong> <code>1250000</code> (good for CDIs), <code>3600000</code> (good for GDIs), but between 400-800 KB/s is SEGA's recommendation.</li><li><strong>Variable Bitrate:</strong> <code>vbrN</code>, where <code>N</code> is a number between <code>1</code> and <code>4</code>, with <code>1</code> being the highest quality.</li></ul>|
+| `bitrate`        | Specifies the video bitrate in either bits per second, or four variable bitrate levels. Controls the output video quality.       | <ul><li><strong>Constant Bitrate:</strong> <code>1250000</code> (good for CDIs), <code>3600000</code> (good for GDIs), but between 400-800 KB/s is SEGA's recommendation.</li><li><strong>Variable Bitrate:</strong> <code>vbrN</code>, where <code>N</code> is a number between <code>1</code> and <code>4</code>, with <code>1</code> being the highest quality. Level `3` is typically recommended.</li></ul>|
 
 ## Usage
 The following folder structure will be created after extracting the release package.
