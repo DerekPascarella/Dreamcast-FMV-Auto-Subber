@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Dreamcast FMV Auto-Subber v1.6
+# Dreamcast FMV Auto-Subber v1.7
 # A utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.
 #
 # Written by Derek Pascarella (ateam)
@@ -10,7 +10,7 @@ use strict;
 use File::Copy;
 
 # Set version number.
-my $version = "1.6";
+my $version = "1.7";
 
 # Set header used in CLI messages.
 my $cli_header = "\nDreamcast FMV Auto-Subber v" . $version . "\nA utility to batch re-encode Dreamcast SFD videos with baked-in subtitles.\n\nWritten by Derek Pascarella (ateam)\n\n";
@@ -87,9 +87,16 @@ if(!@input_files)
 
 # Status message.
 print $cli_header;
-
-# Status message.
 print scalar(@input_files) . " video(s) found in \"input\" folder.\n\n";
+
+if($config_options{'bitrate'} =~ /^vbr([1-4])$/)
+{
+	print "Using variable bitrate of quality level " . $1 . ".\n\n";
+}
+else
+{
+	print "Using constant bitrate of " . $config_options{'bitrate'} . " bits per second.\n\n";
+}
 
 # Copy each helper utility to "input" folder.
 foreach my $file (@helper_utilities)
@@ -153,8 +160,20 @@ foreach my $file_sfd (@input_files)
 
 		# Begin constructing ffmpeg command.
 		my $ffmpeg_command =  "ffmpeg.exe -i m2v.m2v -vcodec mpeg1video ";
-		   $ffmpeg_command .= "-b:v " . $config_options{'bitrate'} . " -maxrate " . $config_options{'bitrate'} . " -minrate " . $config_options{'bitrate'} . " -bufsize " . $config_options{'bitrate'} . " -muxrate " . $config_options{'bitrate'} . " ";
-		   $ffmpeg_command .= "-s " . $dimensions . " -an -vf \"subtitles=";
+		
+		# Continue constructing command for variable bitrate.
+		if($config_options{'bitrate'} =~ /^vbr([1-4])$/)
+		{
+			$ffmpeg_command .= "-q:v " . $1 . " ";
+		}
+		# Continue constructing command for constant bitrate.
+		else
+		{
+			$ffmpeg_command .= "-b:v " . $config_options{'bitrate'} . " -maxrate " . $config_options{'bitrate'} . " -minrate " . $config_options{'bitrate'} . " -bufsize " . $config_options{'bitrate'} . " -muxrate " . $config_options{'bitrate'} . " ";
+		}
+
+		# Continue constructing ffmpeg command.
+		$ffmpeg_command .= "-s " . $dimensions . " -an -vf \"subtitles=";
 
 		# Store target aspect ratio width and height from configuration option.
 		my($ar_width, $ar_height) = split(/:/, $config_options{'aspect_ratio'});
@@ -229,35 +248,75 @@ foreach my $file_sfd (@input_files)
 			system "ffmpeg.exe -i m2a.m2a -c:a pcm_s16le -ar 44100 -ac 2 wav.wav > NUL 2>&1";
 			unlink("m2a.m2a");
 
-			# Status message.
-			print "   - Converting WAV to SFA...\n";
+			# An error occurred when attempting to convert audio stream to WAV.
+			if(!-e "wav.wav")
+			{
+				print STDERR "     ERROR: Could not successfully convert audio stream to WAV!\n";
+				print "            Skipping...\n";
+			}
+			# Otherwise, proceed.
+			else
+			{
+				# Status message.
+				print "   - Converting WAV to SFA...\n";
 
-			# Convert WAV to SFA.
-			system "adxencd.exe wav.wav adx.adx > NUL 2>&1";
-			unlink("wav.wav");
-			system "legaladx.exe adx.adx sfa.sfa > NUL 2>&1";
-			unlink("adx.adx");
+				# Convert WAV to SFA.
+				system "adxencd.exe wav.wav adx.adx > NUL 2>&1";
+				unlink("wav.wav");
+				system "legaladx.exe adx.adx sfa.sfa > NUL 2>&1";
+				unlink("adx.adx");
 
-			# Status message.
-			print "   - Encoding new video with subtitles...\n";
+				# An error occurred when attempting to convert WAV to SFA.
+				if(!-e "sfa.sfa")
+				{
+					print STDERR "     ERROR: Could not successfully convert WAV to SFA!\n";
+					print "            Skipping...\n";
+				}
+				# Otherwise, proceed.
+				else
+				{
+					# Status message.
+					print "   - Encoding new video with subtitles...\n";
 
-			# Encode new video with baked-in subtitles.
-			system "$ffmpeg_command > NUL 2>&1";
-			unlink("m2v.m2v");
+					# Encode new video with baked-in subtitles.
+					system "$ffmpeg_command > NUL 2>&1";
+					unlink("m2v.m2v");
 
-			# Status message.
-			print "   - Remuxing new video with original audio stream...\n";
-			
-			# Remux video and original audio stream.
-			system "sfdmux.exe -V=m1v.m1v -A=sfa.sfa -S=sfd.sfd > NUL 2>&1";
-			unlink("sfa.sfa");
-			unlink("m1v.m1v");
+					# An error occurred when attempting to encode M1V with subtitles..
+					if(!-e "m1v.m1v")
+					{
+						print STDERR "     ERROR: Could not successfully encode M1V with subtitles!\n";
+						print "            Skipping...\n";
+					}
+					# Otherwise, proceed.
+					else
+					{
+						# Status message.
+						print "   - Remuxing new video with original audio stream...\n";
+						
+						# Remux video and original audio stream.
+						system "sfdmux.exe -V=m1v.m1v -A=sfa.sfa -S=sfd.sfd > NUL 2>&1";
+						unlink("sfa.sfa");
+						unlink("m1v.m1v");
 
-			# Status message.
-			print "   - Moving new SFD to \"output\" folder...\n";
+						# An error occurred when attempting to encode M1V with subtitles..
+						if(!-e "sfd.sfd")
+						{
+							print STDERR "     ERROR: Could not successfully remux new video with original audio stream!\n";
+							print "            Skipping...\n";
+						}
+						# Otherwise, proceed.
+						else
+						{
+							# Status message.
+							print "   - Moving new SFD to \"output\" folder...\n";
 
-			# Move new SFD to "output" folder.
-			rename("sfd.sfd", "../output/" . $file_sfd);
+							# Move new SFD to "output" folder.
+							rename("sfd.sfd", "../output/" . $file_sfd);
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -321,10 +380,10 @@ sub validate_ini
 	my %config = @_;
 
 	# Store list of string type keys.
-	my @string_keys = ('font_face', 'font_color', 'outline_color', 'aspect_ratio');
+	my @string_keys = ("font_face", "font_color", "outline_color", "aspect_ratio", "bitrate");
 
 	# Store list of integer type keys.
-	my @integer_keys = ('font_size', 'outline_strength', 'margin_vertical', 'margin_left', 'margin_right', 'bitrate');
+	my @integer_keys = ("font_size", "outline_strength", "margin_vertical", "margin_left", "margin_right");
 
 	# Validate bold setting.
 	if($config{'font_bold'} ne "yes" && $config{'font_bold'} ne "no")
@@ -345,6 +404,12 @@ sub validate_ini
 		if($key eq "aspect_ratio" && ($config{$key} !~ /^(\d+):(\d+)$/ || $1 <= 0 || $2 <= 0))
 		{
 			return(0, "Configuration option \"" . $key . "\" is not a valid aspect ratio (currently set to \"" . $config{$key} . "\").");
+		}
+
+		# Ivalid birate.
+		if($key eq "bitrate" && $config{$key} !~ /^\d+$/ && $config{$key} !~ /^vbr[1-4]$/)
+		{
+			return(0, "Configuration option \"" . $key . "\" is not a valid bitrate (currently set to \"" . $config{$key} . "\").");
 		}
 	}
 
